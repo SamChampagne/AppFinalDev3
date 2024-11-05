@@ -24,7 +24,7 @@ const MenuPrincipale = () => {
 
   return (
     <div className="h-screen w-screen flex bg-gray-100">
-      <aside className="w-1/5 bg-gray-800 text-white p-4">
+      <aside className="w-1/6 bg-gray-800 text-white p-4">
         <h2 className="text-2xl font-bold mb-5">Menu</h2>
         <nav>
           <ul>

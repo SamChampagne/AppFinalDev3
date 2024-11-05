@@ -39,3 +39,31 @@ export const ajouterRecettes = async (nouvelleRecette: IRecette): Promise<IRecet
     const data = await response.json();
     return data as IRecette;
 };
+
+export const getRecetteTitre = async (titre: string): Promise<IRecette> => {
+    const response = await fetch(`${URL}/recette/title/${titre}`)
+
+    if(!response.ok){
+        throw new Error('Erreur lors de la recherche par titre')
+    }
+    
+    const data = await response.json();
+    return data as IRecette
+}
+
+export const supprimerRecette = async (id: string | undefined): Promise<void> => {
+
+    const response = await fetch(`${URL}/recette/delete/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        
+    });
+
+    if(!response.ok){
+        throw new Error('Erreur lors de la suppression')
+    }
+
+    return 
+}

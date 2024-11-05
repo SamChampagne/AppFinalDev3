@@ -1,23 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { IRecette } from '../model/recette';
-import { useParams } from 'react-router-dom';
-import { getRecetteById } from '../apiService';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getRecetteById, supprimerRecette } from '../apiService';
+import Popup from './popup';
 
 const AffichageRecette = () => {
     const { id } = useParams<{ id: string }>();
     const [recette, setRecette] = useState<IRecette | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [showPopup, setShowPopup] = useState(false); 
+    const [popupType, setPopupType] = useState(0); 
+    const [popupMessage, setPopupMessage] = useState(''); 
+    const navigate = useNavigate();
+
+    const handleSuppression = () => {
+        setPopupMessage("Êtes-vous sûr de vouloir supprimer cette recette ?");
+        setPopupType(2); 
+        setShowPopup(true); 
+    };
+
+    const confirmSuppression = async () => {
+        try {
+            await supprimerRecette(id!);
+            alert("Recette supprimée avec succès !");
+            navigate('/'); // Redirige vers la page d'accueil après suppression
+        } catch (err) {
+            console.error("Erreur lors de la suppression de la recette :", err);
+            setError("Erreur lors de la suppression de la recette");
+        } finally {
+            setShowPopup(false); // Fermer le popup après l'action
+        }
+    };
 
     useEffect(() => {
         const fetchRecette = async () => {
             try {
                 setLoading(true);
                 const fetchedData = await getRecetteById(id!);
-                console.log("JSON de la recette :", fetchedData); // Vérifiez la structure ici
-    
-                
-                
+                console.log("JSON de la recette :", fetchedData);
+                setRecette(fetchedData.recetteTrouver);
             } catch (err) {
                 console.error("Erreur lors de la récupération de la recette :", err);
                 setError("Erreur lors de la récupération de la recette");
@@ -25,13 +47,25 @@ const AffichageRecette = () => {
                 setLoading(false);
             }
         };
-    
+
         fetchRecette();
     }, [id]);
-    
 
-    if (loading) return <p>Chargement...</p>;
-    if (error) return <p>{error}</p>;
+    if (loading) {
+        return (
+            <div className="flex items-start justify-center h-screen pt-10">
+                <p className="text-4xl font-bold text-white">Chargement...</p>
+            </div>
+        );
+    }
+    if (error) {
+        return (
+            <div className="flex items-start justify-center h-screen pt-10">
+                <p className="text-2xl font-semibold text-white">{error}</p>
+            </div>
+        );
+    }
+
     if (!recette) return <p>Aucune recette trouvée</p>;
 
     return (
@@ -62,7 +96,6 @@ const AffichageRecette = () => {
                         <p><strong>Date de création :</strong> {new Date(recette.dateCreation).toLocaleDateString()}</p>
                     )}
                 </div>
-
                 <div className="mb-4">
                     <h3 className="text-lg font-semibold text-gray-700">Ingrédients</h3>
                     <ul className="list-disc list-inside text-black">
@@ -84,7 +117,21 @@ const AffichageRecette = () => {
                         ))}
                     </ol>
                 </div>
+                <div className="mb-4 p-10 flex space-x-4">
+                    <button className="bg-red-700 px-4 py-2 text-white rounded-sm" onClick={handleSuppression}>Supprimer</button>
+                    <button className="bg-blue-700 px-4 py-2 text-white rounded-sm">Modifier</button>
+                </div>
             </div>
+
+            {/* Affichage du Popup */}
+            {showPopup && (
+                <Popup
+                    type={popupType}
+                    message={popupMessage}
+                    onConfirm={confirmSuppression}
+                    onClose={() => setShowPopup(false)} // Fermer le popup
+                />
+            )}
         </div>
     );
 };
