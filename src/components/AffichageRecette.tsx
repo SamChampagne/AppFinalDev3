@@ -1,9 +1,9 @@
 import {  useEffect, useState } from 'react';
 import { IRecette } from '../model/recette';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getRecetteById, supprimerRecette } from '../apiService';
-import Popup from './popup';
-
+import { getRecetteById, supprimerRecette } from '../services/apiService';
+import Popup from './Popup';
+import NavigationBar from './barNavigation'
 const AffichageRecette = () => {
     const { id } = useParams<{ id: string }>();
     const [recette, setRecette] = useState<IRecette | null>(null);
@@ -70,19 +70,8 @@ const AffichageRecette = () => {
 
     return (
         <div className="flex min-h-screen w-screen">
-            {/* Barre de navigation latérale */}
-            <aside className="w-1/5 bg-gray-800 text-white p-4">
-                <h2 className="text-2xl font-bold mb-5">Menu</h2>
-                <nav>
-                    <ul>
-                        <li className="mb-2"><a href="/" className="text-gray-300 hover:text-white">Accueil</a></li>
-                        <li className="mb-2"><a href="/ajouter" className="text-gray-300 hover:text-white">Ajout</a></li>
-                        <li className="mb-2"><a href="/recherche" className="text-gray-300 hover:text-white">Recherche</a></li>
-                    </ul>
-                </nav>
-            </aside>
-
             {/* Contenu principal de la recette */}
+            <NavigationBar></NavigationBar>
             <div className="w-4/5 p-6 bg-white rounded-lg shadow-md overflow-y-auto">
                 <h2 className="text-2xl font-bold text-black mb-4">{recette.titre}</h2>
 

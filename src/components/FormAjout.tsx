@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { IIngredient, IEtape } from '../model/recette';
-import { ajouterRecettes } from '../apiService';
+import { ajouterRecettes } from '../services/apiService';
+
 const FormulaireAjout = () => {
     const [titre, setTitre] = useState('');
     const [ingredients, setIngredients] = useState<IIngredient[]>([]);
