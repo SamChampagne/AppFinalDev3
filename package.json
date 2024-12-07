@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://<votre-nom-utilisateur>.github.io/<nom-du-repo>",
+  "homepage": "https://https://samchampagne.github.io/AppFinalDev3/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
