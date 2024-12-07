@@ -48,10 +48,12 @@ export const getRecetteByTitle = async (title: string): Promise<IRecette> => {
     return data.recetteTrouver; 
 };
 export const ajouterRecettes = async (nouvelleRecette: IRecette): Promise<IRecette> => {
+    const token = localStorage.getItem('token');
     const response = await fetch(`${URL}/recette`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify(nouvelleRecette)
     });
@@ -106,3 +108,22 @@ export const ajouterUser = async (utilisateur: Iutilisateur): Promise<void> => {
     }
     return
 }
+export const modifierRecette = async (id: string, recetteModifiee: IRecette): Promise<IRecette> => {
+    const token = localStorage.getItem("token");
+    console.log(JSON.stringify(recetteModifiee))
+    const response = await fetch(`${URL}/recette/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(recetteModifiee),
+    });
+
+    if (!response.ok) {
+        throw new Error("Erreur lors de la modification de la recette");
+    }
+
+    const data = await response.json();
+    return data as IRecette;
+};

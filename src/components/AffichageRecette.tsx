@@ -2,6 +2,7 @@ import {  useEffect, useState } from 'react';
 import { IRecette } from '../model/recette';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getRecetteById, supprimerRecette } from '../services/apiService';
+import FormulaireModification from './FormModification';
 import Popup from './Popup';
 import NavigationBar from './barNavigation'
 const AffichageRecette = () => {
@@ -13,7 +14,7 @@ const AffichageRecette = () => {
     const [popupType, setPopupType] = useState(0); 
     const [popupMessage, setPopupMessage] = useState(''); 
     const navigate = useNavigate();
-
+    const [showFormModification, setShowFormModification] = useState(false);
     const handleSuppression = () => {
         setPopupMessage("Êtes-vous sûr de vouloir supprimer cette recette ?");
         setPopupType(2); 
@@ -70,59 +71,74 @@ const AffichageRecette = () => {
 
     return (
         <div className="flex min-h-screen w-screen">
-            {/* Contenu principal de la recette */}
-            <NavigationBar></NavigationBar>
+            <NavigationBar />
             <div className="w-4/5 p-6 bg-white rounded-lg shadow-md overflow-y-auto">
-                <h2 className="text-2xl font-bold text-black mb-4">{recette.titre}</h2>
-
-                <div className="mb-4">
-                    <h3 className="text-lg font-semibold text-gray-700">Informations générales</h3>
-                    <p className="text-black"><strong>Temps de préparation :</strong> {recette.tempsPreparation} minutes</p>
-                    <p className="text-black"><strong>Temps de cuisson :</strong> {recette.tempsCuisson} minutes</p>
-                    <p className="text-black"><strong>Portions :</strong> {recette.portions}</p>
-                    {recette.auteur && <p><strong>Auteur :</strong> {recette.auteur}</p>}
-                    {recette.dateCreation && (
-                        <p><strong>Date de création :</strong> {new Date(recette.dateCreation).toLocaleDateString()}</p>
-                    )}
-                </div>
-                <div className="mb-4">
-                    <h3 className="text-lg font-semibold text-gray-700">Ingrédients</h3>
-                    <ul className="list-disc list-inside text-black">
-                        {recette.ingredients?.map((ingredient) => (
-                            <li key={ingredient._id}>
-                                {ingredient.nom} - {ingredient.quantite}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                <div className="mb-4">
-                    <h3 className="text-lg font-semibold text-gray-700">Étapes</h3>
-                    <ol className="list-decimal list-inside text-black">
-                        {recette.etapes?.sort((a, b) => a.ordre - b.ordre).map((etape) => (
-                            <li key={etape._id} className="mb-2">
-                                {etape.description}
-                            </li>
-                        ))}
-                    </ol>
-                </div>
-                <div className="mb-4 p-10 flex space-x-4">
-                    <button className="bg-red-700 px-4 py-2 text-white rounded-sm" onClick={handleSuppression}>Supprimer</button>
-                    <button className="bg-blue-700 px-4 py-2 text-white rounded-sm">Modifier</button>
-                </div>
+                {showFormModification ? (
+                    <FormulaireModification recetteId={id!} /> 
+                ) : (
+                    <>
+                        <h2 className="text-2xl font-bold text-black mb-4">{recette.titre}</h2>
+                        <div className="mb-4">
+                            <h3 className="text-lg font-semibold text-gray-700">Informations générales</h3>
+                            <p className="text-black"><strong>Temps de préparation :</strong> {recette.tempsPreparation} minutes</p>
+                            <p className="text-black"><strong>Temps de cuisson :</strong> {recette.tempsCuisson} minutes</p>
+                            <p className="text-black"><strong>Portions :</strong> {recette.portions}</p>
+                            {recette.auteur && <p><strong>Auteur :</strong> {recette.auteur}</p>}
+                            {recette.dateCreation && (
+                                <p><strong>Date de création :</strong> {new Date(recette.dateCreation).toLocaleDateString()}</p>
+                            )}
+                        </div>
+                        <div className="mb-4">
+                            <h3 className="text-lg font-semibold text-gray-700">Ingrédients</h3>
+                            <ul className="list-disc list-inside text-black">
+                                {recette.ingredients?.map((ingredient) => (
+                                    <li key={ingredient._id}>
+                                        {ingredient.nom} - {ingredient.quantite}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div className="mb-4">
+                            <h3 className="text-lg font-semibold text-gray-700">Étapes</h3>
+                            <ol className="list-decimal list-inside text-black">
+                                {recette.etapes?.sort((a, b) => a.ordre - b.ordre).map((etape) => (
+                                    <li key={etape._id} className="mb-2">
+                                        {etape.description}
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
+                        <div className="mb-4 p-10 flex space-x-4">
+                            <button 
+                                className="bg-red-700 px-4 py-2 text-white rounded-sm" 
+                                onClick={handleSuppression}
+                            >
+                                Supprimer
+                            </button>
+                            <button 
+                                className="bg-blue-700 px-4 py-2 text-white rounded-sm" 
+                                onClick={() => setShowFormModification(true)}
+                            >
+                                Modifier
+                            </button>
+                        </div>
+                    </>
+                )}
             </div>
-
+    
             {/* Affichage du Popup */}
             {showPopup && (
                 <Popup
                     type={popupType}
                     message={popupMessage}
                     onConfirm={confirmSuppression}
-                    onClose={() => setShowPopup(false)} // Fermer le popup
+                    onClose={() => setShowPopup(false)}
                 />
             )}
         </div>
     );
+    
+    
 };
 
 export default AffichageRecette;

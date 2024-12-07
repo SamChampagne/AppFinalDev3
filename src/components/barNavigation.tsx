@@ -40,7 +40,7 @@ const Navigation = () => {
   }, [estLogin]); // Se lance chaque fois que estLogin change
 
   return (
-    <aside className="w-1/6 h-screen bg-gray-800 text-white flex flex-col p-4">
+    <aside className="w-1/6 min-h-screen bg-gray-800 text-white flex flex-col p-4">
       <div>
         <h2 className="text-2xl font-bold mb-5">Menu</h2>
         <nav>
