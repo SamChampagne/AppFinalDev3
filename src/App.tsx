@@ -14,11 +14,11 @@ const App = () => {
         <div className="flex-1 ">
           <Routes>
             <Route path="/" element={<MenuPrincipale />} />
-            <Route path="/Ajouter" element={<MenuAjout />} />
-            <Route path="/recette/:id" element={<AffichageRecette />} />
-            <Route path="/recherche" element={<RechercheRecette />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/inscription" element={<Inscription />} />
+            <Route path="https://finaldev3.netlify.app/Ajouter" element={<MenuAjout />} />
+            <Route path="https://finaldev3.netlify.app/recette/:id" element={<AffichageRecette />} />
+            <Route path="https://finaldev3.netlify.app/recherche" element={<RechercheRecette />} />
+            <Route path="https://finaldev3.netlify.app/login" element={<Login />} />
+            <Route path="https://finaldev3.netlify.app/inscription" element={<Inscription />} />
           </Routes>
         </div>
     </Router>
