@@ -15,7 +15,7 @@ const FormulaireModification = ({ recetteId }: { recetteId: string }) => {
     useEffect(() => {
         getRecetteById(recetteId)
             .then((recette) => {
-            
+                
                 setTitre(recette.recetteTrouver.titre || ''); 
                 setIngredients(recette.recetteTrouver.ingredients || []); 
                 setEtapes(recette.recetteTrouver.etapes || []); 

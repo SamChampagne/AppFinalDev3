@@ -5,7 +5,9 @@ import { getRecetteById, supprimerRecette } from '../services/apiService';
 import FormulaireModification from './FormModification';
 import Popup from './Popup';
 import NavigationBar from './barNavigation'
+
 const AffichageRecette = () => {
+    
     const { id } = useParams<{ id: string }>();
     const [recette, setRecette] = useState<IRecette | null>(null);
     const [loading, setLoading] = useState(true);
